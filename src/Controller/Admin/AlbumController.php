@@ -8,6 +8,7 @@ use App\Form\AlbumType;
 use App\Form\MediaType;
 use App\Repository\AlbumRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AlbumController extends AbstractController
 {
+    public AlbumRepository $albumRepository;
+    public EntityManagerInterface $entityManager;
+
     public function __construct(AlbumRepository $albumRepository ,EntityManagerInterface $entityManager)
     {
         $this->albumRepository = $albumRepository;
@@ -49,9 +53,8 @@ class AlbumController extends AbstractController
     }
 
     #[Route('/admin/album/update/{id}', name: 'admin_album_update')]
-    public function update(Request $request, int $id): Response
+    public function update(Request $request, #[MapEntity(id:'id')] Album $album): Response
     {
-        $album = $this->albumRepository->find($id);
         $form = $this->createForm(AlbumType::class, $album);
         $form->handleRequest($request);
 
@@ -65,10 +68,9 @@ class AlbumController extends AbstractController
     }
 
     #[Route('/admin/album/delete/{id}', name: 'admin_album_delete')]
-    public function delete(int $id): Response
+    public function delete(#[MapEntity(id:'id')] Album $album): Response
     {
-        $media = $this->albumRepository->find($id);
-        $this->entityManager->remove($media);
+        $this->entityManager->remove($album);
         $this->entityManager->flush();
 
         return $this->redirectToRoute('admin_album_index');

@@ -7,6 +7,7 @@ use App\Form\MediaType;
 use App\Repository\AlbumRepository;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MediaController extends AbstractController
 {
+    public MediaRepository $mediaRepository;
+    public EntityManagerInterface $entityManager;
+
     public function __construct(MediaRepository $mediaRepository ,EntityManagerInterface $entityManager)
     {
         $this->mediaRepository = $mediaRepository;
@@ -71,9 +75,8 @@ class MediaController extends AbstractController
     }
 
     #[Route('/admin/media/delete/{id}', name: 'admin_media_delete')]
-    public function delete(int $id) : Response
+    public function delete(#[MapEntity(id:'id')] Media $media) : Response
     {
-        $media = $this->mediaRepository->find($id);
         $this->entityManager->remove($media);
         $this->entityManager->flush();
         unlink($media->getPath());
