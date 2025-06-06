@@ -9,9 +9,13 @@ use App\Repository\AlbumRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class MediaFixtures extends Fixture
+class MediaFixtures extends Fixture implements DependentFixtureInterface
 {
+    public UserRepository $userRepository;
+    public AlbumRepository $albumRepository;
+
     public function __construct(UserRepository $userRepository, AlbumRepository $albumRepository){
         $this->userRepository = $userRepository;
         $this->albumRepository = $albumRepository;
@@ -28,7 +32,7 @@ class MediaFixtures extends Fixture
             $media = new Media();
             $media->setUser($randomUser);
             $media->setPath('uploads/'.$j.'.jpg');
-            $media->setTitle("Title $j+1");
+            $media->setTitle("Title".$j+1);
             $manager->persist($media);
         }
 
@@ -55,6 +59,5 @@ class MediaFixtures extends Fixture
             UserFixtures::class,
             AlbumFixtures::class
         ];
-
     }
 }
