@@ -9,16 +9,18 @@ use App\Repository\AlbumRepository;
 use App\Repository\MediaRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    public function __construct(UserRepository $userRepository ,EntityManagerInterface $entityManager)
+    private UserRepository $userRepository;
+
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->entityManager = $entityManager;
 
     }
 
@@ -39,20 +41,18 @@ class HomeController extends AbstractController
     }
 
     #[Route('/guest/{id}', name: 'guest')]
-    public function guest(int $id) : Response
+    public function guest(#[MapEntity(id:'id')] User $guest) : Response
     {
-        $guest = $this->userRepository->find($id);
         return $this->render('front/guest.html.twig', [
             'guest' => $guest
         ]);
     }
 
 
-    #[Route('/portfolio/{id}', name: 'portfolio')]
-    public function portfolio(?int $id = null,UserRepository $userRepository, AlbumRepository $albumRepository,MediaRepository $mediaRepository) : Response
+    #[Route('/portfolio/{id?}', name: 'portfolio')]
+    public function portfolio(UserRepository $userRepository, AlbumRepository $albumRepository,MediaRepository $mediaRepository,#[MapEntity(id:'id')] ?Album $album) : Response
     {
         $albums = $albumRepository->findAll();
-        $album = $id ? $albumRepository->find($id) : null;
         $user = $userRepository->findOneByAdmin(true);
 
         $medias = $album
