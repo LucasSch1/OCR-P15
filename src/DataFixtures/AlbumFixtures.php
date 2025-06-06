@@ -13,9 +13,10 @@ class AlbumFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
 
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 6; $i++) {
             $album = new Album();
             $album->setName('Album '.$i);
+            $manager->persist($album);
         }
 
         $manager->flush();
