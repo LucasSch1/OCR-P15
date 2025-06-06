@@ -43,7 +43,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findOneByAdmin(bool $admin): ?User
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.isAdmin = :admin')
+            ->andWhere('u.admin = :admin')
             ->setParameter('admin', $admin)
             ->setMaxResults(1)
             ->getQuery()
