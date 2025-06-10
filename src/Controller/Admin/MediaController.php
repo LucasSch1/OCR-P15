@@ -58,7 +58,10 @@ class MediaController extends AbstractController
     {
         $media = new Media();
         $this->denyAccessUnlessGranted(MediaVoter::MANAGE, $media);
-        $form = $this->createForm(MediaType::class, $media, ['is_admin' => $this->isGranted('ROLE_ADMIN')]);
+        $form = $this->createForm(MediaType::class, $media, [
+            'is_admin' => $this->isGranted('ROLE_ADMIN'),
+            'current_user' => $this->getUser()
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
