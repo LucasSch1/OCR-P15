@@ -6,6 +6,7 @@ use App\Entity\Media;
 use App\Form\MediaType;
 use App\Repository\AlbumRepository;
 use App\Repository\MediaRepository;
+use App\Security\Voter\MediaVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,6 +57,7 @@ class MediaController extends AbstractController
     public function add(Request $request) : Response
     {
         $media = new Media();
+        $this->denyAccessUnlessGranted(MediaVoter::MANAGE, $media);
         $form = $this->createForm(MediaType::class, $media, ['is_admin' => $this->isGranted('ROLE_ADMIN')]);
         $form->handleRequest($request);
 
@@ -77,6 +79,7 @@ class MediaController extends AbstractController
     #[Route('/admin/media/delete/{id}', name: 'admin_media_delete')]
     public function delete(#[MapEntity(id:'id')] Media $media) : Response
     {
+        $this->denyAccessUnlessGranted(MediaVoter::MANAGE, $media);
         $this->entityManager->remove($media);
         $this->entityManager->flush();
         unlink($media->getPath());
