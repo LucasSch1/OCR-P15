@@ -32,7 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'user', cascade: ['remove'], orphanRemoval: true)]
     private Collection $medias;
 
     #[ORM\Column(length: 255)]
@@ -40,10 +40,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isActive = true;
+
     public function __construct()
     {
         $this->medias = new ArrayCollection();
         $this->roles = ['ROLE_USER'];
+        $this->isActive = true;
     }
 
     public function setId(int $id): self
@@ -135,6 +139,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->password = $password;
 
+        return $this;
+    }
+
+    public function isActive(): bool {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self {
+        $this->isActive = $isActive;
         return $this;
     }
 }
