@@ -50,6 +50,16 @@ class MediaType extends AbstractType
                     'choice_label' => 'name',
                 ])
             ;
+        }else{
+            $builder
+                ->add('user', EntityType::class, [
+                    'label' => 'Utilisateur',
+                    'required' => false,
+                    'class' => User::class,
+                    'choices' => [$options['current_user']],
+                    'choice_label' => 'name',
+                ]);
+
         }
     }
 
@@ -58,6 +68,7 @@ class MediaType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Media::class,
             'is_admin' => false,
+            'current_user' => null,
         ]);
     }
 }
