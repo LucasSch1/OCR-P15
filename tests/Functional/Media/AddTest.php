@@ -2,6 +2,7 @@
 
 namespace App\Tests\Functional\Media;
 
+use App\Entity\Album;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Tests\Functional\FunctionalTestCase;
@@ -46,6 +47,10 @@ class AddTest extends FunctionalTestCase
     public function testAdminAddMediaSuccessful(): void
     {
         $this->login("ina@zaoui.com");
+        $album = new Album();
+        $album->setName('Test Album');
+        $this->getEntityManager()->persist($album);
+        $this->getEntityManager()->flush();
         $this->get('/admin/media/add');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextNotContains('.form-label', 'Album');
@@ -53,7 +58,7 @@ class AddTest extends FunctionalTestCase
         $formData = [
             'media[user]' => $user->getId(),
             'media[title]' => 'Test Media Admin',
-            'media[album]' => 1,
+            'media[album]' => $album->getId(),
             'media[file]' => new UploadedFile(
                 __DIR__.'/fixtures/test_media.jpg',
                 'test_media.jpg',
