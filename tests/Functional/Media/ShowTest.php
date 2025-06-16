@@ -19,6 +19,7 @@ class ShowTest extends FunctionalTestCase
 
     public function testGuestShowMedia(): void
     {
+        $this->get("/logout");
         $this->get('/admin/media');
         self::assertResponseRedirects('/login');
     }
