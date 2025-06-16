@@ -5,7 +5,6 @@ namespace App\Tests\Functional\Media;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Tests\Functional\FunctionalTestCase;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AddTest extends FunctionalTestCase
@@ -78,11 +77,10 @@ class AddTest extends FunctionalTestCase
 
     public function testGuestAddMedia(): void
     {
+        $this->get("/logout");
         $this->get('/admin/media/add');
         self::assertResponseRedirects('/login');
 
     }
-
-
 
 }
