@@ -1,22 +1,27 @@
 <?php
 
-namespace App\Tests\Functional;
+namespace App\Tests\Functional\User;
 
 use App\Entity\User;
+use App\Tests\Functional\FunctionalTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class RegisterTest extends FunctionalTestCase
-
+class AddTest extends FunctionalTestCase
 {
-    public function testThatRegistrationShouldSucceeded(): void
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->login();
+    }
+
+    public function testAdminAddGuest(): void
     {
         $this->login("ina@zaoui.com");
         $this->get('/admin/guests/add');
         $this->assertResponseIsSuccessful();
 
         $this->submit('Ajouter', self::getFormData());
-        echo $this->client->getResponse()->getContent();
-//        $this->assertResponseStatusCodeSame(302);
+        self::assertResponseRedirects('/admin/guests');
         $this->client->followRedirect();
 
         $user = $this->getEntityManager()->getRepository(User::class)->findOneBy(['email'=>'toto@exemple.com']);
@@ -27,6 +32,20 @@ class RegisterTest extends FunctionalTestCase
         self::assertSame('toto@exemple.com', $user->getEmail());
         self::assertNotNull($userPasswordHasher->hashPassword($user, $user->getPassword()));
 
+    }
+
+    public function testUserAddGuest(): void
+    {
+        $this->get('/admin/guests/add');
+        $this->assertResponseStatusCodeSame(403);
+
+    }
+
+    public function testGuestAddGuest(): void
+    {
+        $this->get("/logout");
+        $this->get('/admin/guests/add');
+        self::assertResponseRedirects('/login');
     }
 
 
