@@ -58,6 +58,7 @@ class AddTest extends FunctionalTestCase
         return $overrideData + [
                 'user[name]' => 'Toto',
                 'user[email]' => 'toto@exemple.com',
+                'user[description]' => 'Description Test',
                 'user[password]' => 'TotoPassword123!',
                 'user[roles]' => 'ROLE_USER',
             ];
