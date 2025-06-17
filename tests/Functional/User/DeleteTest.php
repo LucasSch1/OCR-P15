@@ -7,7 +7,6 @@ use App\Tests\Functional\FunctionalTestCase;
 
 class DeleteTest extends FunctionalTestCase
 {
-    private ?User $user = null;
     private ?int $userId = null;
 
     protected function setUp(): void
@@ -56,7 +55,6 @@ class DeleteTest extends FunctionalTestCase
         $user->setRoles(["ROLE_USER"]);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
-        $this->user = $user;
         $this->userId = $user->getId();
     }
 

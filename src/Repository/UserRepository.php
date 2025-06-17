@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -10,14 +11,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
- * @extends ServiceEntityRepository<User>
- *
- * @implements PasswordUpgraderInterface<User>
- *
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @template T of User
+ * @template-extends ServiceEntityRepository<User>
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
@@ -48,6 +43,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+
+    /**
+     * @return array<array{id: int, name: string, admin: bool, media_count: int}>
+     */
+    public function findAllWithoutAdmin(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.id', 'u.name', 'u.admin', 'COUNT(m.id) AS media_count')
+            ->leftJoin('u.medias', 'm')
+            ->andWhere('u.admin = :admin')
+            ->setParameter('admin', false)
+            ->groupBy('u.id')
+            ->orderBy('u.name', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
 

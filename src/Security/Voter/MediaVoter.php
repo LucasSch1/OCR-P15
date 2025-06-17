@@ -3,14 +3,16 @@
 namespace App\Security\Voter;
 
 use App\Entity\Media;
+use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @extends Voter<string, Media>
+ */
 final class MediaVoter extends Voter
 {
-//    public const EDIT = 'POST_EDIT';
-//    public const VIEW = 'POST_VIEW';
     public const MANAGE = 'MEDIA_MANAGE';
 
     protected function supports(string $attribute, mixed $subject): bool
@@ -23,11 +25,11 @@ final class MediaVoter extends Voter
         $user = $token->getUser();
 
         // if the user is anonymous, do not grant access
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof User) {
             return false;
         }
 
-        if ($attribute === self::MANAGE && $subject instanceof Media && null === $subject->getUser()) {
+        if ($attribute === self::MANAGE && null === $subject->getUser()) {
             return true;
         }
 

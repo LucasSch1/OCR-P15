@@ -30,7 +30,7 @@ class AddTest extends FunctionalTestCase
         self::assertNotNull($user);
         self::assertSame('Toto', $user->getName());
         self::assertSame('toto@exemple.com', $user->getEmail());
-        self::assertNotNull($userPasswordHasher->hashPassword($user, $user->getPassword()));
+        self::assertTrue($userPasswordHasher->isPasswordValid($user, 'TotoPassword123!'));
 
     }
 

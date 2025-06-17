@@ -7,8 +7,6 @@ use App\Tests\Functional\FunctionalTestCase;
 
 class DeleteTest extends FunctionalTestCase
 {
-
-    private ?Album $album = null;
     private ?int $albumId = null;
     protected function setUp(): void
     {
@@ -55,7 +53,6 @@ class DeleteTest extends FunctionalTestCase
         $album->setName('Test Album');
         $this->getEntityManager()->persist($album);
         $this->getEntityManager()->flush();
-        $this->album = $album;
         $this->albumId = $album->getId();
     }
 }

@@ -15,11 +15,19 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class UserController extends AbstractController
 {
+    /**
+     * @var UserRepository<User>
+     */
     private UserRepository $userRepository;
     private EntityManagerInterface $entityManager;
 
     private UserPasswordHasherInterface $userPasswordHasher;
 
+    /**
+     * @param UserRepository<User> $userRepository
+     * @param EntityManagerInterface $entityManager
+     * @param UserPasswordHasherInterface $userPasswordHasher
+     */
     public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userRepository = $userRepository;

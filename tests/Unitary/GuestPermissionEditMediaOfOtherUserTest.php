@@ -31,7 +31,7 @@ class GuestPermissionEditMediaOfOtherUserTest extends TestCase
     }
 
 
-    private static function createMedia($user): Media
+    private static function createMedia(User $user): Media
     {
         $media = new Media();
         $media->setTitle('Test title');

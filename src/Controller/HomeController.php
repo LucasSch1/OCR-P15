@@ -16,8 +16,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
+    /**
+     * @var UserRepository<User>
+     */
     private UserRepository $userRepository;
 
+    /**
+     * @param UserRepository<User> $userRepository
+     */
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
@@ -34,7 +40,7 @@ class HomeController extends AbstractController
     #[Route('/guests', name: 'guests')]
     public function guests() : Response
     {
-        $guests = $this->userRepository->findBy(['admin' => false]);
+        $guests = $this->userRepository->findAllWithoutAdmin();
         return $this->render('front/guests.html.twig', [
             'guests' => $guests
         ]);
@@ -48,7 +54,13 @@ class HomeController extends AbstractController
         ]);
     }
 
-
+    /**
+     * @param UserRepository<User> $userRepository
+     * @param AlbumRepository $albumRepository
+     * @param MediaRepository $mediaRepository
+     * @param Album|null $album
+     * @return Response
+     */
     #[Route('/portfolio/{id?}', name: 'portfolio')]
     public function portfolio(UserRepository $userRepository, AlbumRepository $albumRepository,MediaRepository $mediaRepository,#[MapEntity(id:'id')] ?Album $album) : Response
     {

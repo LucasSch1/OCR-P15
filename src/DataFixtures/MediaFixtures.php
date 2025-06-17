@@ -13,9 +13,21 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class MediaFixtures extends Fixture implements DependentFixtureInterface
 {
-    public UserRepository $userRepository;
-    public AlbumRepository $albumRepository;
+    /**
+     * @var UserRepository<User>
+     */
+    private UserRepository $userRepository;
 
+    /**
+     * @var AlbumRepository
+     */
+    private AlbumRepository $albumRepository;
+
+
+    /**
+     * @param UserRepository<User> $userRepository
+     * @param AlbumRepository $albumRepository
+     */
     public function __construct(UserRepository $userRepository, AlbumRepository $albumRepository){
         $this->userRepository = $userRepository;
         $this->albumRepository = $albumRepository;
@@ -31,7 +43,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
             $randomUser = $user[array_rand($user)];
             $media = new Media();
             $media->setUser($randomUser);
-            $filename = str_pad($j,4,'0',STR_PAD_LEFT) . '.jpg';
+            $filename = str_pad((string)$j,4,'0',STR_PAD_LEFT) . '.jpg';
             $media->setPath('uploads/'. $filename);
             $media->setTitle("Title".$j+1);
             $manager->persist($media);

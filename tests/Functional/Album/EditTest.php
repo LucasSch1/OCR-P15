@@ -7,7 +7,6 @@ use App\Tests\Functional\FunctionalTestCase;
 
 class EditTest extends FunctionalTestCase
 {
-    private ?Album $album = null;
     private ?int $albumId = null;
 
 
@@ -56,7 +55,6 @@ class EditTest extends FunctionalTestCase
         $album->setName('Test Album');
         $this->getEntityManager()->persist($album);
         $this->getEntityManager()->flush();
-        $this->album = $album;
         $this->albumId = $album->getId();
     }
 }
