@@ -9,7 +9,6 @@ class EditTest extends FunctionalTestCase
 {
     private ?int $albumId = null;
 
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -19,35 +18,31 @@ class EditTest extends FunctionalTestCase
 
     public function testAdminEditAlbum(): void
     {
-        $this->login("ina@zaoui.com");
-        $this->get('/admin/album/update/'. $this->albumId);
+        $this->login('ina@zaoui.com');
+        $this->get('/admin/album/update/'.$this->albumId);
         $this->assertResponseIsSuccessful();
         $formData = [
-            "album[name]" => "Test Album Edit",
+            'album[name]' => 'Test Album Edit',
         ];
-        $this->submit('Modifier',$formData);
+        $this->submit('Modifier', $formData);
         self::assertResponseRedirects('/admin/album');
         $this->client->followRedirect();
-        $albumEdit = $this->getEntityManager()->getRepository(Album::class)->findOneBy(["name" => "Test Album Edit"]);
+        $albumEdit = $this->getEntityManager()->getRepository(Album::class)->findOneBy(['name' => 'Test Album Edit']);
         $this->assertNotNull($albumEdit);
-
     }
 
     public function testUserEditAlbum(): void
     {
-        $this->get('/admin/album/update/'. $this->albumId);
+        $this->get('/admin/album/update/'.$this->albumId);
         $this->assertResponseStatusCodeSame(403);
-
     }
-
 
     public function testGuestEditAlbum(): void
     {
-        $this->get("/logout");
-        $this->get('/admin/album/update/' . $this->albumId);
+        $this->get('/logout');
+        $this->get('/admin/album/update/'.$this->albumId);
         $this->assertResponseRedirects('/login');
     }
-
 
     public function createTestAlbum(): void
     {

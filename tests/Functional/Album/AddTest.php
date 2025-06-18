@@ -7,8 +7,8 @@ use App\Tests\Functional\FunctionalTestCase;
 
 class AddTest extends FunctionalTestCase
 {
-
     private ?Album $album = null;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -17,21 +17,20 @@ class AddTest extends FunctionalTestCase
 
     public function testAdminAddAlbum(): void
     {
-        $this->login("ina@zaoui.com");
+        $this->login('ina@zaoui.com');
         $this->get('/admin/album/add');
         $this->assertResponseIsSuccessful();
         $formData = [
             'album[name]' => 'Test Album',
         ];
-        $this->submit('Ajouter',$formData);
+        $this->submit('Ajouter', $formData);
         self::assertResponseRedirects('/admin/album');
         $this->client->followRedirect();
 
         $this->album = $this->getEntityManager()->getRepository(Album::class)->findOneBy([
             'name' => 'Test Album',
         ]);
-        $this->assertEquals("Test Album", $this->album->getName());
-
+        $this->assertEquals('Test Album', $this->album->getName());
     }
 
     public function testUserAddAlbum(): void
@@ -46,7 +45,6 @@ class AddTest extends FunctionalTestCase
         $this->get('/admin/album/add');
         $this->assertResponseRedirects('/login');
     }
-
 
     public function createTestAlbum(): void
     {

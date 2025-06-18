@@ -5,14 +5,13 @@ namespace App\Tests\Functional\Media;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Tests\Functional\FunctionalTestCase;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class DeleteTest extends FunctionalTestCase
 {
-
     private ?User $user = null;
     private ?Media $media = null;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,21 +21,19 @@ class DeleteTest extends FunctionalTestCase
         $this->createTestMedia();
     }
 
-
     public function testUserDeleteMediaSuccess(): void
     {
-        $this->get('/admin/media/delete/' . $this->media->getId());
+        $this->get('/admin/media/delete/'.$this->media->getId());
         self::assertResponseRedirects('/admin/media');
         $this->client->followRedirect();
         $deletedMedia = $this->getEntityManager()->getRepository(Media::class)->find($this->media->getId());
         self::assertNull($deletedMedia);
     }
 
-
     public function testGuestDeleteMedia(): void
     {
         $this->get('/logout');
-        $this->get('/admin/media/delete/' . $this->media->getId());
+        $this->get('/admin/media/delete/'.$this->media->getId());
         self::assertResponseRedirects('/login');
     }
 
@@ -69,7 +66,7 @@ class DeleteTest extends FunctionalTestCase
 
         $this->media = $this->getEntityManager()->getRepository(Media::class)->findOneBy([
             'title' => 'Test Media to Delete',
-            'user' => $this->user
+            'user' => $this->user,
         ]);
     }
 }

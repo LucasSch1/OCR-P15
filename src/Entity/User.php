@@ -41,7 +41,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private string $password;
 
-
     /**
      * @var array<string>
      */
@@ -61,6 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setId(int $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -111,7 +111,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param Collection<int, Media> $medias
-     * @return void
      */
     public function setMedias(Collection $medias): void
     {
@@ -135,15 +134,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param array<string> $roles
-     * @return void
      */
     public function setRoles(array $roles): void
     {
         $this->roles = $roles;
     }
 
-    public function eraseCredentials():  void
-    {}
+    public function eraseCredentials(): void
+    {
+    }
 
     public function getUserIdentifier(): string
     {
@@ -162,12 +161,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isActive(): bool {
+    public function isActive(): bool
+    {
         return $this->isActive;
     }
 
-    public function setIsActive(bool $isActive): self {
+    public function setIsActive(bool $isActive): self
+    {
         $this->isActive = $isActive;
+
         return $this;
     }
 }

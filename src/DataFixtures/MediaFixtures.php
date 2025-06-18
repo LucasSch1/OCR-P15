@@ -8,8 +8,8 @@ use App\Entity\User;
 use App\Repository\AlbumRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class MediaFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -18,39 +18,34 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
      */
     private UserRepository $userRepository;
 
-    /**
-     * @var AlbumRepository
-     */
     private AlbumRepository $albumRepository;
-
 
     /**
      * @param UserRepository<User> $userRepository
-     * @param AlbumRepository $albumRepository
      */
-    public function __construct(UserRepository $userRepository, AlbumRepository $albumRepository){
+    public function __construct(UserRepository $userRepository, AlbumRepository $albumRepository)
+    {
         $this->userRepository = $userRepository;
         $this->albumRepository = $albumRepository;
     }
 
     public function load(ObjectManager $manager): void
     {
-
         $user = $this->userRepository->findAll();
         $album = $this->albumRepository->findAll();
 
-        for($j = 0; $j < 5000; $j++){
+        for ($j = 0; $j < 5000; ++$j) {
             $randomUser = $user[array_rand($user)];
             $media = new Media();
             $media->setUser($randomUser);
-            $filename = str_pad((string)$j,4,'0',STR_PAD_LEFT) . '.webp';
-            $media->setPath('uploads/'. $filename);
-            $media->setTitle("Title".$j+1);
+            $filename = str_pad((string) $j, 4, '0', STR_PAD_LEFT).'.webp';
+            $media->setPath('uploads/'.$filename);
+            $media->setTitle('Title'.$j + 1);
             $manager->persist($media);
         }
 
         // Boucle avec les album_id
-        for($i = 5000; $i < 5051; $i++){
+        for ($i = 5000; $i < 5051; ++$i) {
             $randomUser = $user[array_rand($user)];
             $randomAlbum = $album[array_rand($album)];
             $media = new Media();
@@ -61,8 +56,6 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($media);
         }
 
-
-
         $manager->flush();
     }
 
@@ -70,7 +63,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             UserFixtures::class,
-            AlbumFixtures::class
+            AlbumFixtures::class,
         ];
     }
 }

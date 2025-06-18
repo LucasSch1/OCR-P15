@@ -6,7 +6,6 @@ use App\Entity\Media;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends Voter<string, Media>
@@ -17,10 +16,10 @@ final class MediaVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-       return $attribute === self::MANAGE && $subject instanceof Media;
+        return self::MANAGE === $attribute && $subject instanceof Media;
     }
 
-    protected function voteOnAttribute(string $attribute,mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -29,11 +28,11 @@ final class MediaVoter extends Voter
             return false;
         }
 
-        if ($attribute === self::MANAGE && null === $subject->getUser()) {
+        if (self::MANAGE === $attribute && null === $subject->getUser()) {
             return true;
         }
 
-        if($user->isAdmin()){
+        if ($user->isAdmin()) {
             return true;
         }
 

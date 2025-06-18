@@ -3,12 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Album;
-use App\Entity\Media;
 use App\Entity\User;
 use App\Repository\AlbumRepository;
 use App\Repository\MediaRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,42 +25,37 @@ class HomeController extends AbstractController
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-
     }
 
-
     #[Route('/', name: 'home')]
-    public function home() : Response
+    public function home(): Response
     {
         return $this->render('front/home.html.twig');
     }
 
     #[Route('/guests', name: 'guests')]
-    public function guests() : Response
+    public function guests(): Response
     {
         $guests = $this->userRepository->findAllWithoutAdmin();
+
         return $this->render('front/guests.html.twig', [
-            'guests' => $guests
+            'guests' => $guests,
         ]);
     }
 
     #[Route('/guest/{id}', name: 'guest')]
-    public function guest(#[MapEntity(id:'id')] User $guest) : Response
+    public function guest(#[MapEntity(id: 'id')] User $guest): Response
     {
         return $this->render('front/guest.html.twig', [
-            'guest' => $guest
+            'guest' => $guest,
         ]);
     }
 
     /**
      * @param UserRepository<User> $userRepository
-     * @param AlbumRepository $albumRepository
-     * @param MediaRepository $mediaRepository
-     * @param Album|null $album
-     * @return Response
      */
     #[Route('/portfolio/{id?}', name: 'portfolio')]
-    public function portfolio(UserRepository $userRepository, AlbumRepository $albumRepository,MediaRepository $mediaRepository,#[MapEntity(id:'id')] ?Album $album) : Response
+    public function portfolio(UserRepository $userRepository, AlbumRepository $albumRepository, MediaRepository $mediaRepository, #[MapEntity(id: 'id')] ?Album $album): Response
     {
         $albums = $albumRepository->findAll();
         $user = $userRepository->findOneByAdmin(true);
@@ -70,16 +63,16 @@ class HomeController extends AbstractController
         $medias = $album
             ? $mediaRepository->findByAlbum($album)
             : $mediaRepository->findByUser($user);
+
         return $this->render('front/portfolio.html.twig', [
             'albums' => $albums,
             'album' => $album,
-            'medias' => $medias
+            'medias' => $medias,
         ]);
     }
 
-
     #[Route('/about', name: 'about')]
-    public function about() : Response
+    public function about(): Response
     {
         return $this->render('front/about.html.twig');
     }

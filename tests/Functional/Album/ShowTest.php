@@ -14,12 +14,11 @@ class ShowTest extends FunctionalTestCase
 
     public function testAdminShowAlbumPage(): void
     {
-        $this->login("ina@zaoui.com");
+        $this->login('ina@zaoui.com');
         $this->get('/admin/album');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('table', 'Nom');
         $this->assertSelectorTextContains('table tbody tr td:nth-child(2) a.btn-warning', 'Modifier');
-
     }
 
     public function testUserShowAlbumPage(): void

@@ -16,7 +16,7 @@ class AddTest extends FunctionalTestCase
 
     public function testAdminAddGuest(): void
     {
-        $this->login("ina@zaoui.com");
+        $this->login('ina@zaoui.com');
         $this->get('/admin/guests/add');
         $this->assertResponseIsSuccessful();
 
@@ -24,43 +24,41 @@ class AddTest extends FunctionalTestCase
         self::assertResponseRedirects('/admin/guests');
         $this->client->followRedirect();
 
-        $user = $this->getEntityManager()->getRepository(User::class)->findOneBy(['email'=>'toto@exemple.com']);
+        $user = $this->getEntityManager()->getRepository(User::class)->findOneBy(['email' => 'toto@exemple.com']);
 
         $userPasswordHasher = $this->service(UserPasswordHasherInterface::class);
         self::assertNotNull($user);
         self::assertSame('Toto', $user->getName());
         self::assertSame('toto@exemple.com', $user->getEmail());
         self::assertTrue($userPasswordHasher->isPasswordValid($user, 'TotoPassword123!'));
-
     }
 
     public function testUserAddGuest(): void
     {
         $this->get('/admin/guests/add');
         $this->assertResponseStatusCodeSame(403);
-
     }
 
     public function testGuestAddGuest(): void
     {
-        $this->get("/logout");
+        $this->get('/logout');
         $this->get('/admin/guests/add');
         self::assertResponseRedirects('/login');
     }
 
-
     /**
      * @param array<string, string> $overrideData
+     *
      * @return array<string, string>
      */
     public static function getFormData(array $overrideData = []): array
     {
         return $overrideData + [
-                'user[name]' => 'Toto',
-                'user[email]' => 'toto@exemple.com',
-                'user[description]' => 'Description Test',
-                'user[password]' => 'TotoPassword123!',
-                'user[roles]' => 'ROLE_USER',
-            ];
+            'user[name]' => 'Toto',
+            'user[email]' => 'toto@exemple.com',
+            'user[description]' => 'Description Test',
+            'user[password]' => 'TotoPassword123!',
+            'user[roles]' => 'ROLE_USER',
+        ];
     }
 }

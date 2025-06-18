@@ -3,7 +3,6 @@
 namespace App\Tests\Functional\Media;
 
 use App\Tests\Functional\FunctionalTestCase;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ShowTest extends FunctionalTestCase
 {
@@ -15,15 +14,10 @@ class ShowTest extends FunctionalTestCase
         $this->assertSelectorTextContains('table', 'Image');
     }
 
-
-
     public function testGuestShowMedia(): void
     {
-        $this->get("/logout");
+        $this->get('/logout');
         $this->get('/admin/media');
         self::assertResponseRedirects('/login');
     }
-
-
-
 }

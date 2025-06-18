@@ -12,41 +12,35 @@ class FrontTest extends FunctionalTestCase
 {
     private ?int $userId = null;
 
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->createTestUser();
         $this->createAlbum();
-
-
     }
 
     public function testShowGuestsPage(): void
     {
-        $this->get("/guests");
+        $this->get('/guests');
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h3', 'Invités');
         $crawler = $this->client->request('GET', '/guests');
         $crawler->filter('.guest')->reduce(function ($node) {
             return str_contains($node->text(), 'Toto');
         });
-        $this->assertCount(1,$crawler);
+        $this->assertCount(1, $crawler);
         $this->assertStringContainsString('Toto', $crawler->text());
-
     }
 
     public function testShowGuestPage(): void
     {
-        $this->get('/guest/'. $this->userId);
+        $this->get('/guest/'.$this->userId);
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h3', 'Toto');
         self::assertSelectorTextContains('p', 'Ceci est un test');
-        $crawler = $this->client->request('GET', '/guest/'. $this->userId);
+        $crawler = $this->client->request('GET', '/guest/'.$this->userId);
         $rows = $crawler->filter('.col-4.media');
         $this->assertCount(1, $rows);
-
-
     }
 
     public function testShowPortfolioPage(): void
@@ -55,7 +49,6 @@ class FrontTest extends FunctionalTestCase
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h3', 'Portfolio');
         $this->assertSelectorCount(7, '.col-2');
-
     }
 
     public function testShowAboutPage(): void
@@ -63,11 +56,9 @@ class FrontTest extends FunctionalTestCase
         $this->get('/about');
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h2', 'Qui suis-je ?');
-        self::assertSelectorExists("p");
-        self::assertSelectorExists(".col-4 img");
-
+        self::assertSelectorExists('p');
+        self::assertSelectorExists('.col-4 img');
     }
-
 
     public function createTestUser(): User
     {
@@ -76,14 +67,12 @@ class FrontTest extends FunctionalTestCase
         $user->setEmail('toto@exemple.com');
         $user->setDescription('Ceci est un test');
         $user->setRoles(['ROLE_USER']);
-        $user->setIsActive( true);
-
+        $user->setIsActive(true);
 
         $media = new Media();
         $media->setTitle('Test title');
         $media->setPath('tests/Functional/Media/fixtures/test_media.jpg');
         $media->setUser($user);
-
 
         $passwordHasher = $this->service(UserPasswordHasherInterface::class);
         $hashedPassword = $passwordHasher->hashPassword($user, 'TotoPassword123!');
@@ -108,8 +97,5 @@ class FrontTest extends FunctionalTestCase
         $em->flush();
 
         return $album;
-
     }
-
-
 }

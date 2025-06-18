@@ -26,9 +26,9 @@ class MediaType extends AbstractType
                         'mimeTypes' => [
                             'image/*',
                         ],
-                        'mimeTypesMessage' => 'Seules les images JPEG, PNG, GIF, WebP ou SVG sont autorisées.'
-                    ])
-                ]
+                        'mimeTypesMessage' => 'Seules les images JPEG, PNG, GIF, WebP ou SVG sont autorisées.',
+                    ]),
+                ],
             ])
             ->add('title', TextType::class, [
                 'label' => 'Titre',
@@ -50,7 +50,7 @@ class MediaType extends AbstractType
                     'choice_label' => 'name',
                 ])
             ;
-        }else{
+        } else {
             $builder
                 ->add('user', EntityType::class, [
                     'label' => 'Utilisateur',
@@ -59,7 +59,6 @@ class MediaType extends AbstractType
                     'choices' => [$options['current_user']],
                     'choice_label' => 'name',
                 ]);
-
         }
     }
 

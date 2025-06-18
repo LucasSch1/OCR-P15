@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Form\MediaType;
-use App\Repository\AlbumRepository;
 use App\Repository\MediaRepository;
 use App\Security\Voter\MediaVoter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,15 +19,14 @@ class MediaController extends AbstractController
     public MediaRepository $mediaRepository;
     public EntityManagerInterface $entityManager;
 
-    public function __construct(MediaRepository $mediaRepository ,EntityManagerInterface $entityManager)
+    public function __construct(MediaRepository $mediaRepository, EntityManagerInterface $entityManager)
     {
         $this->mediaRepository = $mediaRepository;
         $this->entityManager = $entityManager;
-
     }
 
     #[Route('/admin/media', name: 'admin_media_index')]
-    public function index(Request $request) : Response
+    public function index(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
 
@@ -49,33 +47,31 @@ class MediaController extends AbstractController
         return $this->render('admin/media/index.html.twig', [
             'medias' => $medias,
             'total' => $total,
-            'page' => $page
+            'page' => $page,
         ]);
     }
 
-
     #[Route('/admin/media/add', name: 'admin_media_add')]
-    public function add(Request $request) : Response
+    public function add(Request $request): Response
     {
         $media = new Media();
         $this->denyAccessUnlessGranted(MediaVoter::MANAGE, $media);
         $form = $this->createForm(MediaType::class, $media, [
             'is_admin' => $this->isGranted('ROLE_ADMIN'),
-            'current_user' => $this->getUser()
+            'current_user' => $this->getUser(),
         ]);
         $form->handleRequest($request);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (!$this->isGranted('ROLE_ADMIN')) {
                 $user = $this->getUser();
-                if($user instanceof User){
+                if ($user instanceof User) {
                     $media->setUser($user);
-                }else{
+                } else {
                     throw new \Exception("L'utilisateur n'est pas valide.");
                 }
             }
-            $media->setPath('uploads/' . md5(uniqid()) . '.' . $media->getFile()->guessExtension());
+            $media->setPath('uploads/'.md5(uniqid()).'.'.$media->getFile()->guessExtension());
             $media->getFile()->move('uploads/', $media->getPath());
             $this->entityManager->persist($media);
             $this->entityManager->flush();
@@ -87,7 +83,7 @@ class MediaController extends AbstractController
     }
 
     #[Route('/admin/media/delete/{id}', name: 'admin_media_delete')]
-    public function delete(#[MapEntity(id:'id')] Media $media) : Response
+    public function delete(#[MapEntity(id: 'id')] Media $media): Response
     {
         $this->denyAccessUnlessGranted(MediaVoter::MANAGE, $media);
         $this->entityManager->remove($media);

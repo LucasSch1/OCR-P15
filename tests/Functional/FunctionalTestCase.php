@@ -27,7 +27,9 @@ abstract class FunctionalTestCase extends WebTestCase
 
     /**
      * @template T of object
+     *
      * @param class-string<T> $id
+     *
      * @return T
      */
     protected function service(string $id): object
@@ -45,7 +47,7 @@ abstract class FunctionalTestCase extends WebTestCase
 
     protected function login(string $email = 'invite+1@exemple.com'): void
     {
-        $user = $this->service(EntityManagerInterface::class)->getRepository(User::class)->findOneBy(['email'=>$email]);
+        $user = $this->service(EntityManagerInterface::class)->getRepository(User::class)->findOneBy(['email' => $email]);
 
         $this->client->loginUser($user);
     }
@@ -53,7 +55,7 @@ abstract class FunctionalTestCase extends WebTestCase
     /**
      * @param array<string, mixed> $formData
      */
-    protected function submit (string $button , array $formData = [], string $method = 'POST'): Crawler
+    protected function submit(string $button, array $formData = [], string $method = 'POST'): Crawler
     {
         return $this->client->submitForm($button, $formData, $method);
     }
