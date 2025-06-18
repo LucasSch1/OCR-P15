@@ -1,4 +1,4 @@
-# 🚀 Projet 15 : Refactorisez le code d'un site pour l'optimiser
+# 🚀 OCR-P15 : Refactorisez le code d'un site pour l'optimiser
 
 ## Description
 Ce projet est un site web dédié à la photographie de paysages, permettant à Ina Zaoui de partager ses œuvres et de promouvoir de jeunes photographes. L'application permet aux utilisateurs de découvrir des photos du monde entier et d'en savoir plus sur les voyages de l'artiste."
