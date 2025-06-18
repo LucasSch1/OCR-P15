@@ -43,7 +43,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
             $randomUser = $user[array_rand($user)];
             $media = new Media();
             $media->setUser($randomUser);
-            $filename = str_pad((string)$j,4,'0',STR_PAD_LEFT) . '.jpg';
+            $filename = str_pad((string)$j,4,'0',STR_PAD_LEFT) . '.webp';
             $media->setPath('uploads/'. $filename);
             $media->setTitle("Title".$j+1);
             $manager->persist($media);
@@ -55,7 +55,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
             $randomAlbum = $album[array_rand($album)];
             $media = new Media();
             $media->setUser($randomUser);
-            $media->setPath('uploads/'.$i.'.jpg');
+            $media->setPath('uploads/'.$i.'.webp');
             $media->setTitle("Title $i");
             $media->setAlbum($randomAlbum);
             $manager->persist($media);
