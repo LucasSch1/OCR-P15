@@ -32,5 +32,7 @@ class ShowTest extends FunctionalTestCase
         $this->get('/logout');
         $this->get('/admin/album');
         $this->assertResponseRedirects('/login');
+        $this->client->followRedirect();
+        self::assertSelectorExists('form');
     }
 }

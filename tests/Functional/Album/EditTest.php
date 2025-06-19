@@ -21,12 +21,14 @@ class EditTest extends FunctionalTestCase
         $this->login('ina@zaoui.com');
         $this->get('/admin/album/update/'.$this->albumId);
         $this->assertResponseIsSuccessful();
+        self::assertSelectorExists('form');
         $formData = [
             'album[name]' => 'Test Album Edit',
         ];
         $this->submit('Modifier', $formData);
         self::assertResponseRedirects('/admin/album');
         $this->client->followRedirect();
+        self::assertSelectorTextContains('table', 'Test Album Edit');
         $albumEdit = $this->getEntityManager()->getRepository(Album::class)->findOneBy(['name' => 'Test Album Edit']);
         $this->assertNotNull($albumEdit);
     }

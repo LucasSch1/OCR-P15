@@ -24,6 +24,7 @@ class FrontTest extends FunctionalTestCase
         $this->get('/guests');
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h3', 'Invités');
+        self::assertSelectorExists('.guests');
         $crawler = $this->client->request('GET', '/guests');
         $crawler->filter('.guest')->reduce(function ($node) {
             return str_contains($node->text(), 'Toto');

@@ -26,6 +26,7 @@ class DeleteTest extends FunctionalTestCase
         $this->get('/admin/media/delete/'.$this->media->getId());
         self::assertResponseRedirects('/admin/media');
         $this->client->followRedirect();
+        self::assertSelectorTextNotContains('table', 'Test Media to Delete');
         $deletedMedia = $this->getEntityManager()->getRepository(Media::class)->find($this->media->getId());
         self::assertNull($deletedMedia);
     }

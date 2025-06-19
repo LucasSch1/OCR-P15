@@ -31,6 +31,8 @@ class AddTest extends FunctionalTestCase
         $this->submit('Ajouter', $formData);
         self::assertResponseRedirects('/admin/media');
         $this->client->followRedirect();
+        self::assertSelectorExists('table');
+        self::assertSelectorTextContains('table tr:last-child td:nth-child(2)', 'Test Media');
         $medias = $this->getEntityManager()->getRepository(Media::class)->findOneBy([
             'title' => 'Test Media',
             'user' => $user,
@@ -48,7 +50,11 @@ class AddTest extends FunctionalTestCase
         $this->getEntityManager()->flush();
         $this->get('/admin/media/add');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextNotContains('.form-label', 'Album');
+        $crawler = $this->client->getCrawler();
+        $labels = $crawler->filter('.form-label');
+        $this->assertGreaterThanOrEqual(4, $labels->count());
+        $secondLabelText = $labels->eq(1)->text();
+        $this->assertStringContainsString('Album', $secondLabelText);
         $user = $this->getEntityManager()->getRepository(User::class)->findOneBy(['email' => 'ina@zaoui.com']);
         $formData = [
             'media[user]' => $user->getId(),
@@ -65,12 +71,10 @@ class AddTest extends FunctionalTestCase
         $this->submit('Ajouter', $formData);
         self::assertResponseRedirects('/admin/media');
         $this->client->followRedirect();
-
         $medias = $this->getEntityManager()->getRepository(Media::class)->findOneBy([
             'title' => 'Test Media Admin',
             'user' => $user,
         ]);
-
         self::assertNotNull($medias);
     }
 

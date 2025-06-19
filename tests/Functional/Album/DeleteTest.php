@@ -22,6 +22,8 @@ class DeleteTest extends FunctionalTestCase
         $this->get('/admin/album/delete/'.$this->albumId);
         self::assertResponseRedirects('/admin/album');
         $this->client->followRedirect();
+        self::assertSelectorExists('table');
+        self::assertSelectorTextNotContains('table', 'Test Album');
         $deletedMedia = $this->getEntityManager()->getRepository(Album::class)->find($this->albumId);
         self::assertNull($deletedMedia);
     }
@@ -44,6 +46,8 @@ class DeleteTest extends FunctionalTestCase
         $this->get('/logout');
         $this->get('/admin/album/delete/'.$this->albumId);
         $this->assertResponseRedirects('/login');
+        $this->client->followRedirect();
+        self::assertSelectorExists('form');
     }
 
     public function createTestAlbum(): void

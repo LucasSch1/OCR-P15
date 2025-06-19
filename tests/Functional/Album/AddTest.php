@@ -20,12 +20,17 @@ class AddTest extends FunctionalTestCase
         $this->login('ina@zaoui.com');
         $this->get('/admin/album/add');
         $this->assertResponseIsSuccessful();
+        self::assertSelectorExists('form');
+
         $formData = [
             'album[name]' => 'Test Album',
         ];
         $this->submit('Ajouter', $formData);
         self::assertResponseRedirects('/admin/album');
         $this->client->followRedirect();
+        self::assertSelectorTextContains('main h1', 'Albums');
+        self::assertSelectorExists('table');
+        self::assertSelectorTextContains('table', 'Test Album');
 
         $this->album = $this->getEntityManager()->getRepository(Album::class)->findOneBy([
             'name' => 'Test Album',
@@ -44,6 +49,8 @@ class AddTest extends FunctionalTestCase
         $this->get('/logout');
         $this->get('/admin/album/add');
         $this->assertResponseRedirects('/login');
+        $this->client->followRedirect();
+        self::assertSelectorExists('form');
     }
 
     public function createTestAlbum(): void
