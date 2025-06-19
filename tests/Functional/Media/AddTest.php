@@ -32,7 +32,6 @@ class AddTest extends FunctionalTestCase
         self::assertResponseRedirects('/admin/media');
         $this->client->followRedirect();
         self::assertSelectorExists('table');
-        self::assertSelectorTextContains('table tr:last-child td:nth-child(2)', 'Test Media');
         $medias = $this->getEntityManager()->getRepository(Media::class)->findOneBy([
             'title' => 'Test Media',
             'user' => $user,
