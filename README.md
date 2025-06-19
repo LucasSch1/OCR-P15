@@ -1,128 +1,124 @@
-# 🚀 Projet 15 : Refactorisez le code d'un site pour l'optimiser
+# 🚀 OCR-P15: Refactor Website Code for Optimization
 
 ## Description
-Ce projet est un site web dédié à la photographie de paysages, permettant à Ina Zaoui de partager ses œuvres et de promouvoir de jeunes photographes. L'application permet aux utilisateurs de découvrir des photos du monde entier et d'en savoir plus sur les voyages de l'artiste."
+This project is a landscape photography website, allowing Ina Zaoui to share her work and promote young photographers. The application enables users to discover photos from around the world and learn more about the artist's travels.
 
-## Prérequis
+## Prerequisites
 - PHP >= 8.0
 - Composer
 - Symfony CLI
-- Postgres SQL
+- PostgreSQL
 
+## Development Tools
+- PHPStan for static analysis
+- Rector for code modernization
+- PHPUnit for testing
+- Symfony Profiler for debugging
 
-## Outils de Développement
-- PHPStan pour l'analyse statique
-- Rector pour la modernisation du code
-- PHPUnit pour les tests
-- Symfony Profiler pour le débogage
-
-## Structure du Projet
-- `src/` : Code source de l'application
-- `templates/` : Templates Twig
-- `tests/` : Tests unitaires et fonctionnels
-- `config/` : Configuration de l'application
-- `public/` : Fichiers publics (assets, uploads)
-- `migrations/` : Migrations de la base de données
+## Project Structure
+- `src/`: Application source code
+- `templates/`: Twig templates
+- `tests/`: Unit and functional tests
+- `config/`: Application configuration
+- `public/`: Public files (assets, uploads)
+- `migrations/`: Database migrations
 
 # Installation
 
-## 📥 1. Cloner le projet
-Clonez le dépôt sur votre machine locale :
+## 📥 1. Clone the project
+Clone the repository to your local machine:
 ```bash
 git clone https://github.com/LucasSch1/OCR-P15.git
 cd OCR-P15
 ```
-## ⚙️ 2. Installer les dépendances
-Exécutez la commande suivante pour installer les dépendances PHP :
+
+## ⚙️ 2. Install dependencies
+Run the following command to install PHP dependencies:
 ```bash
 composer install
 ```
-Attendez la fin du téléchargement et de l’installation des ressources.
+Wait for the download and installation of resources to complete.
 
-## 🛠 3. Configurer la base de données
-Modifiez le fichier **.env** pour **renseigner vos identifiants de connexion à la base de données.**
+## 🛠 3. Configure the database
+Modify the **.env** file to **enter your database connection credentials.**
 
-Voici la configuration attendue :
+Expected configuration:
 ```bash
 DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/ina_zaoui?serverVersion=16&charset=utf8"
 ```
-**⚠️ Remplacez app et !ChangeMe! par votre identifiant et votre mot de passe réel si nécessaire ainsi que la version de votre base de données.**
+**⚠️ Replace app and !ChangeMe! with your actual username and password if needed, as well as your database version.**
 
-## 🏗 4. Créer et appliquer la base de données
-➤ Créer la base de données :
+## 🏗 4. Create and apply the database
+➤ Create the database:
 ```bash
 php bin/console doctrine:database:create
 ```
-➤ Appliquer la migration à la base de données :
+➤ Apply migration to the database:
 ```bash
 php bin/console doctrine:migrations:migrate
 ```
-**Confirmez en tapant yes si demandé.**
+**Confirm by typing yes if prompted.**
 
-➤ Créer une migration (**si celle présente ne fonctionne pas**) :
+➤ Create a migration (**if the existing one doesn't work**):
 ```bash
 php bin/console doctrine:migrations:diff
 ```
 
-
-## 🔄 5. Créer la base de données de test et exécuter les migrations :
+## 🔄 5. Create test database and run migrations:
 ```bash
 php bin/console doctrine:database:create --env=test
 php bin/console doctrine:migrations:migrate --env=test
 ```
 
-
-## ✅ 6. Vérifier la synchronisation du schéma
-Assurez-vous que la base de données est bien en phase avec les entités :
+## ✅ 6. Verify schema synchronization
+Ensure the database is in sync with entities:
 ```bash
 php bin/console doctrine:schema:validate
 ```
-Si tout est correct, vous devriez voir :
+If everything is correct, you should see:
 
 **Mapping   OK**
 
 **Database  OK**
 
-Les messages doivent s'afficher en vert ✅.
+Messages should appear in green ✅.
 
-## 🗄 7. Ajouter des données de test
-Chargez les fixtures (données de test) dans la base de données :
+## 🗄 7. Add test data
+Load fixtures (test data) into the database:
 ```bash
 php bin/console doctrine:fixtures:load
 ```
-Chargez les fixtures (données de test) dans la base de données de test :
+Load fixtures (test data) into the test database:
 ```bash
 php bin/console doctrine:fixtures:load --env=test
 ```
 
-**Confirmez en tapant yes si demandé.**
+**Confirm by typing yes if prompted.**
 
 # Usage
 
-## 🚀 Lancer le serveur web
-Démarrez le serveur Symfony en arrière-plan :
+## 🚀 Launch web server
+Start the Symfony server in the background:
 ```bash
 symfony serve -d
 ```
-Cliquez ensuite sur le **lien affiché dans la console pour accéder au projet.**
-
+Then click on the **link displayed in the console to access the project.**
 
 ## 🧪 Tests
-Pour exécuter les tests :
+To run tests:
 ```bash
 php bin/phpunit
 ```
-Note : Assurez-vous d'avoir configuré la base de données de test et chargé les fixtures avant d'exécuter les tests.
+Note: Make sure you have configured the test database and loaded fixtures before running tests.
 
-## 🔑 Connexion
+## 🔑 Login
 
-Pour se connecter avec le compte Administrateur, il faut utiliser les identifiants suivants :
+To log in with the Administrator account, use the following credentials:
 
-- Identifiant : `ina@zaoui.com`
-- Mot de passe : `password`
+- Username: `ina@zaoui.com`
+- Password: `password`
 
+To log in with the Guest account, use the following credentials:
 
-Pour se connecter avec le compte Invité, il faut utiliser les identifiants suivants :
-
-- Identifiant : `invite+1@exemple.com`
-- Mot de passe : `password`
+- Username: `invite+1@exemple.com`
+- Password: `password`
