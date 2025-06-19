@@ -20,9 +20,9 @@ class BlockTest extends FunctionalTestCase
     public function testAdminBlockUser(): void
     {
         $this->login('ina@zaoui.com');
-        $this->get('/admin/guests/suspend/'.$this->userId);
-        self::assertResponseRedirects('/admin/guests');
-        $crawler = $this->client->request('GET', '/admin/guests');
+        $this->get('/admin/guest/suspend/'.$this->userId);
+        self::assertResponseRedirects('/admin/guest');
+        $crawler = $this->client->request('GET', '/admin/guest');
         $rows = $crawler->filter('table tr');
         $row = $rows->reduce(function ($node) {
             return str_contains($node->text(), 'testUserBlock');
@@ -36,9 +36,9 @@ class BlockTest extends FunctionalTestCase
     public function testAdminUnblockUser(): void
     {
         $this->login('ina@zaoui.com');
-        $this->get('/admin/guests/unlock/'.$this->userId);
-        self::assertResponseRedirects('/admin/guests');
-        $crawler = $this->client->request('GET', '/admin/guests');
+        $this->get('/admin/guest/unlock/'.$this->userId);
+        self::assertResponseRedirects('/admin/guest');
+        $crawler = $this->client->request('GET', '/admin/guest');
         $rows = $crawler->filter('table tr');
         $row = $rows->reduce(function ($node) {
             return str_contains($node->text(), 'testUserBlock');
@@ -52,8 +52,8 @@ class BlockTest extends FunctionalTestCase
     public function testUserBlockedLogin(): void
     {
         $this->login('ina@zaoui.com');
-        $this->get('/admin/guests/suspend/'.$this->userId);
-        self::assertResponseRedirects('/admin/guests');
+        $this->get('/admin/guest/suspend/'.$this->userId);
+        self::assertResponseRedirects('/admin/guest');
 
         $this->get('/logout');
         self::assertResponseRedirects('/');
@@ -71,13 +71,13 @@ class BlockTest extends FunctionalTestCase
 
     public function testUserBlockUser(): void
     {
-        $this->get('/admin/guests/suspend/'.$this->userId);
+        $this->get('/admin/guest/suspend/'.$this->userId);
         self::assertResponseStatusCodeSame(403);
     }
 
     public function testUserUnblockUser(): void
     {
-        $this->get('/admin/guests/unlock/'.$this->userId);
+        $this->get('/admin/guest/unlock/'.$this->userId);
         self::assertResponseStatusCodeSame(403);
     }
 
@@ -85,7 +85,7 @@ class BlockTest extends FunctionalTestCase
     {
         $this->get('/logout');
         self::assertResponseRedirects('/');
-        $this->get('/admin/guests/suspend/'.$this->userId);
+        $this->get('/admin/guest/suspend/'.$this->userId);
         self::assertResponseRedirects('/login');
     }
 
@@ -93,7 +93,7 @@ class BlockTest extends FunctionalTestCase
     {
         $this->get('/logout');
         self::assertResponseRedirects('/');
-        $this->get('/admin/guests/unlock/'.$this->userId);
+        $this->get('/admin/guest/unlock/'.$this->userId);
         self::assertResponseRedirects('/login');
     }
 

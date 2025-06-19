@@ -19,8 +19,8 @@ class DeleteTest extends FunctionalTestCase
     public function testAdminDeleteGuest(): void
     {
         $this->login('ina@zaoui.com');
-        $this->get('/admin/guests/delete/'.$this->userId);
-        self::assertResponseRedirects('/admin/guests');
+        $this->get('/admin/guest/delete/'.$this->userId);
+        self::assertResponseRedirects('/admin/guest');
         $this->client->followRedirect();
         self::assertResponseIsSuccessful();
         $deleteUserId = $this->getEntityManager()->getRepository(User::class)->find($this->userId);
@@ -29,14 +29,14 @@ class DeleteTest extends FunctionalTestCase
 
     public function testUserDeleteGuest(): void
     {
-        $this->get('/admin/guests/delete/'.$this->userId);
+        $this->get('/admin/guest/delete/'.$this->userId);
         self::assertResponseStatusCodeSame(403);
     }
 
     public function testGuestDeleteGuest(): void
     {
         $this->get('/logout');
-        $this->get('/admin/guests/delete/'.$this->userId);
+        $this->get('/admin/guest/delete/'.$this->userId);
         self::assertResponseRedirects('/login');
     }
 

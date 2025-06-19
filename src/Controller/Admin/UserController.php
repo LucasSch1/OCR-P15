@@ -33,7 +33,7 @@ final class UserController extends AbstractController
         $this->userPasswordHasher = $userPasswordHasher;
     }
 
-    #[Route('/admin/guests', name: 'admin_guests_index')]
+    #[Route('/admin/guest', name: 'admin_guest_index')]
     public function index(): Response
     {
         $users = $this->userRepository->findBy(['admin' => false], ['id' => 'ASC']);
@@ -44,27 +44,27 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/guests/suspend/{id}', name: 'admin_guest_remove_access')]
+    #[Route('/admin/guest/suspend/{id}', name: 'admin_guest_remove_access')]
     public function removeAccess(#[MapEntity(id: 'id')] User $user): Response
     {
         $user->setIsActive(false);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        return $this->redirectToRoute('admin_guests_index');
+        return $this->redirectToRoute('admin_guest_index');
     }
 
-    #[Route('/admin/guests/unlock/{id}', name: 'admin_guest_add_access')]
+    #[Route('/admin/guest/unlock/{id}', name: 'admin_guest_add_access')]
     public function addAccess(#[MapEntity(id: 'id')] User $user): Response
     {
         $user->setIsActive(true);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        return $this->redirectToRoute('admin_guests_index');
+        return $this->redirectToRoute('admin_guest_index');
     }
 
-    #[Route('/admin/guests/add', name: 'admin_guest_add')]
+    #[Route('/admin/guest/add', name: 'admin_guest_add')]
     public function addGuest(Request $request): Response
     {
         $user = new User();
@@ -77,19 +77,19 @@ final class UserController extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('admin_guests_index');
+            return $this->redirectToRoute('admin_guest_index');
         }
 
         return $this->render('admin/user/add.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route('/admin/guests/delete/{id}', name: 'admin_guest_delete')]
+    #[Route('/admin/guest/delete/{id}', name: 'admin_guest_delete')]
     public function deleteGuest(Request $request, #[MapEntity(id: 'id')] User $user): Response
     {
         $this->entityManager->remove($user);
         $this->entityManager->flush();
 
-        return $this->redirectToRoute('admin_guests_index');
+        return $this->redirectToRoute('admin_guest_index');
     }
 
     //

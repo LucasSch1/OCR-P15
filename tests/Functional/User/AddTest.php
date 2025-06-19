@@ -17,11 +17,11 @@ class AddTest extends FunctionalTestCase
     public function testAdminAddGuest(): void
     {
         $this->login('ina@zaoui.com');
-        $this->get('/admin/guests/add');
+        $this->get('/admin/guest/add');
         $this->assertResponseIsSuccessful();
 
         $this->submit('Ajouter', self::getFormData());
-        self::assertResponseRedirects('/admin/guests');
+        self::assertResponseRedirects('/admin/guest');
         $this->client->followRedirect();
 
         $user = $this->getEntityManager()->getRepository(User::class)->findOneBy(['email' => 'toto@exemple.com']);
@@ -35,14 +35,14 @@ class AddTest extends FunctionalTestCase
 
     public function testUserAddGuest(): void
     {
-        $this->get('/admin/guests/add');
+        $this->get('/admin/guest/add');
         $this->assertResponseStatusCodeSame(403);
     }
 
     public function testGuestAddGuest(): void
     {
         $this->get('/logout');
-        $this->get('/admin/guests/add');
+        $this->get('/admin/guest/add');
         self::assertResponseRedirects('/login');
     }
 
